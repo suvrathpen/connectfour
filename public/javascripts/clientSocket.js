@@ -59,15 +59,16 @@ socket.on('move', function(data){
 			counter++;
 			var $cell = $("<div class='col-md-1'</div>");
 			var piece = board[row][col];
+			console.log("piece is: "+piece);
 			if(piece == 0){
 				var $blueSquare = $("<div id='rectangle' class='blueRect'></div>");
 				$blueSquare.appendTo($cell);
 			}
-			else if(piece == 1){
+			else if(piece == data.playerNumberOne){
 				var $redSquare = $("<div id='rectangle' class='redRect'></div>");
 				$redSquare.appendTo($cell);
 			}
-			else if(piece == 2){
+			else if(piece == data.playerNumberTwo){
 				var $greenSquare = $("<div id='rectangle' class='greenRect'></div>");
 				$greenSquare.appendTo($cell);
 			}
@@ -99,6 +100,7 @@ socket.on('move', function(data){
 			console.log("entered submit");
 			row = $('#enterRow').val();
 			col = $('#enterCol').val();
+			console.log("playerNumber is "+ data.playerNumber);
 			socket.emit('moveMade', {'row': row, 'col':col});
 			return false;
 		});

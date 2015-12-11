@@ -1,7 +1,8 @@
 var mongoModel = require('../models/mongoModel.js');
 
 var QUORUM = 2; //need two players to start the game
-var usernameList = []
+var usernameList = [];
+var socketList = [];
 exports.init = function(io) {
 	var currentPlayers = 0; // keep track of the number of players
 	var playerNumber = 0;
@@ -13,6 +14,9 @@ exports.init = function(io) {
 		console.log("Received connection event from "+thisPlayer);
 		++currentPlayers;
 		++playerNumber;
+		// console.log("socket.id is: " + socket.id);
+		console.log("playerNumber is: "+ playerNumber);
+		socketList.push({"id": socket.id, "playerNumber":playerNumber});
 		console.log("Emitting nPlayers to: "+currentPlayers);
 		socket.emit('nPlayers', { number: currentPlayers});
 		socket.broadcast.emit('nPlayers', { number: currentPlayers});
@@ -41,8 +45,15 @@ exports.init = function(io) {
 				// mongoModel.togglePlayer();
 				// console.log("playerNumber is: " + thisPlayer);
 				// console.log("playerTurn is: " + playerTurn);
+				socketList[0]
 				socket.emit('waitForTurn');
-				socket.broadcast.emit('move', {'board':board});
+				playerNumberOne = socketList[0].playerNumber;
+				playerNumberTwo = socketList[1].playerNumber;
+				console.log(socketList);
+				console.log("playerNumberOne: "+ playerNumberOne);
+				console.log("playerNumberTwo: "+ playerNumberTwo)
+				socket.broadcast.emit('move', {'board':board, 
+														'playerNumberOne': playerNumberOne, 'playerNumberTwo':playerNumberTwo});
 				// socket.emit('move', {'board': board});
 				// socket.broadcast.emit('waitForTurn');
 			}
@@ -84,13 +95,24 @@ exports.init = function(io) {
 			console.log("move was made");
 			console.log("row is: " + data.row);
 			console.log("col is: " + data.col);
-			mongoModel.changeBoard(data.row, data.col);
+			var playerNumber;
+			for(var i = 0; i < socketList.length; i++){
+				if(socketList[i].id == socket.id){
+					console.log("inside for loop setted playerNumber");
+					playerNumber = socketList[i].playerNumber;
+				}
+			}
+			console.log("playerNumber is: " + playerNumber);
+			mongoModel.changeBoard(data.row, data.col, playerNumber);
 			var board = mongoModel.returnBoard();
 			// var playerTurn = mongoModel.returnCurrentPlayer();
+			// console.log("player number is: " + playerTurn);
 				// mongoModel.togglePlayer();
 			socket.emit('waitForTurn');
 			console.log("board in moveMade is:" + board);
-			socket.broadcast.emit('move', {'board': board});
+			playerNumberOne = socketList[0].playerNumber;
+			playerNumberTwo = socketList[1].playerNumber;
+			socket.broadcast.emit('move', {'board': board, 'playerNumberOne': playerNumberOne, 'playerNumberTwo':playerNumberTwo});
 		});
 		/*
 		 * Upon this connection disconnecting (sending a disconnect event)
@@ -100,6 +122,8 @@ exports.init = function(io) {
 		 */
 		socket.on('disconnect', function () {
 			--currentPlayers;
+			socketList = [];
+			usernameList = [];
 			socket.broadcast.emit('players', { number: currentPlayers});
 		});
 	});

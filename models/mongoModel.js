@@ -28,7 +28,7 @@ var rows = 6;
 var columns = 7;
 var board;
 // currentPlayer is either 1 (Red) or 2 (Black)
-var currentPlayer = 2;
+var currentPlayer = 1;
 
 // Use connect method to connect to the MongoDB server
 mongoClient.connect('mongodb://'+connection_string, function(err, db) {
@@ -136,11 +136,11 @@ exports.update = function(collection, filter, update, callback) {
         });
 }
 
-exports.changeBoard = function(row, column){
+exports.changeBoard = function(row, column, playerNumber){
   for(var i = 0; i < rows; i++){
     for(var j = 0; j < columns; j++){
       if(i == row && j == column){
-        board[i][j] = currentPlayer;
+        board[i][j] = playerNumber;
       }
     }
   }
@@ -148,12 +148,14 @@ exports.changeBoard = function(row, column){
 }
 
 exports.togglePlayer = function(){
+  console.log("entered togglePlayer");
   if(currentPlayer == 1){
     currentPlayer = 2;
   }
   else if(currentPlayer == 2){
     currentPlayer = 1;
   }
+  console.log("currentPlayer is: " + currentPlayer);
 }
 
 exports.returnBoard = function(){
