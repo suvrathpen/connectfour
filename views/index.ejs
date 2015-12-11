@@ -1,0 +1,55 @@
+<html>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<!--<script src="../javascripts/index.js"></script> -->
+	<script src="../javascripts/clientSocket.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../stylesheets/style.css">
+	<body>
+		<table style='width:400px'>
+			<tr>
+				<td>Players: <span id='nPlayers'>0</span></td>
+				<td style='text-align:right'><span id='myName'></span> Wins: <span id='nWins'>0</span></td>
+			</tr>
+		</table>
+		<form id='playerName' hidden>
+			<label>Player name:
+				<input type="text" name="playerName">
+				<input type="submit" value="submit">
+			</label>
+		</form>
+		<p id='waiting' hidden> Waiting for additional players to arrive. </p>
+		<p id='yourTurn'></p>
+		<div id='gameBoard'></div>
+		<!-- <form id="f" hidden>
+			Row: <input id="row" type="text" name="row" value=""><br>
+			Column: <input id="column" type="text" name="column" value=""><br>
+		</form> -->
+		<form id='rowcol' hidden>
+		  Row:<br>
+		  <input type="text" id="enterRow" name="enterRow">
+		  <br>
+		  Column:<br>
+		  <input type="text" id="enterCol" name="enterCol">
+		  <br><br>
+		  <input type="submit" value="Submit">
+		</form>
+		<p id="turn"></p>
+		<p id='tweeting' hidden> Waiting for all other players to tweet. </p>
+		<p id='tabulation' hidden> Waiting for all other players to vote. </p>
+		<div id='trendTweet' hidden>
+			<p> Write a tweet for the trending Twitter topic: <span id='trend'></span></p>
+			<form id='tweet'>
+				<input type='text' name='tweet'>
+				<input type="submit" value="tweet">
+			</form>
+		</div>
+		<div id="tweets" hidden>
+			<p>Here are candidate tweets so far.</p>
+			<ul>
+			</ul>
+		</div>
+		<button id='playAgain' hidden>Play again?</button>
+	</body>
+</html>
