@@ -11,21 +11,21 @@ body {
   margin-top: 25px;
 }
 
-.blueRect {
+div[class^='blueRect-'] {
 	height: 50px;
 	width: 50px;
 	background-color: blue;
 	border:1px solid #000;
 }
 
-.redRect {
+div[class^='redRect-'] {
 	height: 50px;
 	width: 50px;
 	background-color: red;
 	border:1px solid #000;
 }
 
-.greenRect {
+div[class^='greenRect-'] {
 	height: 50px;
 	width: 50px;
 	background-color: green;

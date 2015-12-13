@@ -52,24 +52,32 @@ socket.on('move', function(data){
 	var board = data.board;
 	// $('#gameBoard').append('<p> It works</p>');
 	// only display if its your turn
+	var counter = 0;
 	for(var row = 0; row < 6; row++){
 		var $row = $("<div class='row'</div>");
-		var counter = 0;
 		for(var col = 0; col < 7; col++){
-			counter++;
 			var $cell = $("<div class='col-md-1'</div>");
 			var piece = board[row][col];
 			console.log("piece is: "+piece);
 			if(piece == 0){
-				var $blueSquare = $("<div id='rectangle' class='blueRect'></div>");
+				var a = "<div id='rectangle'";
+				var b = "class='blueRect-";
+				var c = ""+ counter + "'";
+				var $blueSquare = $(a + b + c + "</div>");
 				$blueSquare.appendTo($cell);
 			}
 			else if(piece == data.playerNumberOne){
-				var $redSquare = $("<div id='rectangle' class='redRect'></div>");
+				var a = "<div id='rectangle'";
+				var b = "class='redRect-";
+				var c = ""+ counter + "'";
+				var $redSquare = $(a + b + c + "</div>");
 				$redSquare.appendTo($cell);
 			}
 			else if(piece == data.playerNumberTwo){
-				var $greenSquare = $("<div id='rectangle' class='greenRect'></div>");
+				var a = "<div id='rectangle'";
+				var b = "class='blueRect-";
+				var c = ""+ counter + "'";
+				var $greenSquare = $(a + b + c + "</div>");
 				$greenSquare.appendTo($cell);
 			}
 			// if(piece == 1){
@@ -85,6 +93,7 @@ socket.on('move', function(data){
 			// 	var $redSquare = $("<div id='rectangle' class='redRect'></div>");
 			// 	$redSquare.appendTo($cell);
 			// }
+			counter++;
 			$cell.appendTo($row);
 		}
 		$row.appendTo($('#gameBoard'));
@@ -95,6 +104,7 @@ socket.on('move', function(data){
 	// else{
 	// 	$('#turn').text("It is not your turn player " + data.playerNumber);
 	// }
+	// add interactivity to click a column and make a move here
 	$("#rowcol").show();
 	$("#rowcol").submit(function() {
 			console.log("entered submit");
@@ -104,6 +114,15 @@ socket.on('move', function(data){
 			socket.emit('moveMade', {'row': row, 'col':col});
 			return false;
 		});
+	$('.row #rectangle').on('click', function(){
+		console.log($(this));
+		console.log($(this).attr('class'));
+		var classA = $(this).attr('class').split("-");
+		//get the number in the class which is the 2nd index
+		var number = classA[1];
+		colClicked = number % 7;
+		console.log("colClicked is: " + colClicked);
+	});
 });
 
 

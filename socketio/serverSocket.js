@@ -16,7 +16,7 @@ exports.init = function(io) {
 		++playerNumber;
 		// console.log("socket.id is: " + socket.id);
 		console.log("playerNumber is: "+ playerNumber);
-		socketList.push({"id": socket.id, "playerNumber":playerNumber});
+		socketList.push({"id": socket.id, "playerNumber": playerNumber});
 		console.log("Emitting nPlayers to: "+currentPlayers);
 		socket.emit('nPlayers', { number: currentPlayers});
 		socket.broadcast.emit('nPlayers', { number: currentPlayers});
@@ -31,6 +31,7 @@ exports.init = function(io) {
 
 		socket.on('name', function(data){
 			usernameList.push(data.username);
+			console.log("pushing username: "+ data.username);
 			if (usernameList.length <= 1) {
   		console.log("Emitting waiting to: "+playerNumber);
 			socket.emit('waiting');
@@ -45,11 +46,11 @@ exports.init = function(io) {
 				// mongoModel.togglePlayer();
 				// console.log("playerNumber is: " + thisPlayer);
 				// console.log("playerTurn is: " + playerTurn);
-				socketList[0]
+				console.log('usernameList is: '+ usernameList);
+				console.log("socketList is: " + socketList);
 				socket.emit('waitForTurn');
 				playerNumberOne = socketList[0].playerNumber;
 				playerNumberTwo = socketList[1].playerNumber;
-				console.log(socketList);
 				console.log("playerNumberOne: "+ playerNumberOne);
 				console.log("playerNumberTwo: "+ playerNumberTwo)
 				socket.broadcast.emit('move', {'board':board, 
@@ -103,6 +104,7 @@ exports.init = function(io) {
 				}
 			}
 			console.log("playerNumber is: " + playerNumber);
+			// check if its a valid move here
 			mongoModel.changeBoard(data.row, data.col, playerNumber);
 			var board = mongoModel.returnBoard();
 			// var playerTurn = mongoModel.returnCurrentPlayer();
@@ -124,6 +126,8 @@ exports.init = function(io) {
 			--currentPlayers;
 			socketList = [];
 			usernameList = [];
+			// console.log("username cleared");
+			// console.log("usernameList is: " + usernameList);
 			socket.broadcast.emit('players', { number: currentPlayers});
 		});
 	});
