@@ -12,7 +12,7 @@ function displayBoard(board, playerNumberOne, playerNumberTwo){
 	for(var row = 0; row < 6; row++){
 		var $row = $("<div class='row'</div>");
 		for(var col = 0; col < 7; col++){
-			var $cell = $("<div class='col-md-1'</div>");
+			var $cell = $("<div class='space col-xs-1'</div>");
 			var piece = board[row][col];
 			console.log("piece is: "+piece);
 			if(piece == 0){
