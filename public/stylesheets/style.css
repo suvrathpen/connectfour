@@ -4,7 +4,7 @@
 }
 
 body {
-	padding: 20px;
+  padding: 20px;
   font-family: "xkcd", sans-serif;
   font-size: 20px;
   color: #f83;
@@ -13,21 +13,21 @@ body {
 
 div[class^='blueRect-'] {
 	height: 50px;
-	width: 50px;
+	width: 100%;
 	background-color: blue;
 	border:1px solid #000;
 }
 
 div[class^='redRect-'] {
 	height: 50px;
-	width: 50px;
+	width: 100%;
 	background-color: red;
 	border:1px solid #000;
 }
 
 div[class^='greenRect-'] {
 	height: 50px;
-	width: 50px;
+	width: 100%;
 	background-color: green;
 	border:1px solid #000;
 }

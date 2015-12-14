@@ -136,15 +136,86 @@ exports.update = function(collection, filter, update, callback) {
         });
 }
 
-exports.changeBoard = function(row, column, playerNumber){
-  for(var i = 0; i < rows; i++){
-    for(var j = 0; j < columns; j++){
-      if(i == row && j == column){
-        board[i][j] = playerNumber;
-      }
+exports.checkForWin = function(playerNumber){
+  var result = checkHorizontal(playerNumber);
+  if(result){
+    return true;
+  }
+  result = checkVertical(playerNumber);
+  if(result){
+    return true;
+  }
+  // checkDiagonals as well;
+  return false;
+
+}
+
+// got initial pseudocode from http://stackoverflow.com/questions/21146940/connect-4-java-win-conditions-check
+exports.checkHorizontal = function(playerNumber){
+  var count = 0;
+  var didWin = false;
+  for(var i = 0; i < 6; i++){
+    count = 0;
+    for(var j = 0; j < 7; j++){
+      if(board[i][j] = playerNumber)
+        count++;
+      else // reset the counting, the eventual sequence has been interrupted
+        count = 0;
+    }
+    if(count >= 4){
+      didWin = true;
+      break;
     }
   }
-  return board;
+  console.log("player won horizontally");
+  return didWin;
+}
+// got initial pseudocode from http://stackoverflow.com/questions/21146940/connect-4-java-win-conditions-check
+exports.checkVertical = function(playerNumber){
+  var count = 0;
+  var didWin = false;
+  for(var j = 0; j < 7; j++){
+    count = 0;
+    for(var i = 0; i < 6; i++){
+        if(board[i][j] = playerNumber){
+          count++;
+        }
+        else{
+          count = 0;
+        }
+    }
+    if(count >= 4){
+      didWin = true
+      break;
+    }
+  }
+  console.log("player won");
+  return didWin;
+}
+
+// exports.checkDiagonal = function(playerNumber){
+
+// }
+
+
+exports.changeBoard = function(column, playerNumber){
+  var boardChanged = false;
+  var i = 5;
+  while(i >= 0 && !boardChanged){
+    //iterate through all rows of a particular column
+    // find the lowest place that hasn't been taken and insert the player Token there
+    console.log("column is: "+column);
+    console.log("board[i][column] is: "+ board[i][column]);
+    if(board[i][column] == 0){
+      console.log("playerNumber in changeBoard is: "+ playerNumber);
+      board[i][column] = playerNumber;
+      boardChanged = true;
+      console.log("board[i][column] is:" + board[i][column]);
+      console.log("only changeBoard once");
+     }
+    i--;
+  }
+  return boardChanged;
 }
 
 exports.togglePlayer = function(){

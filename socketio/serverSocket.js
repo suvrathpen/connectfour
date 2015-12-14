@@ -94,7 +94,7 @@ exports.init = function(io) {
 
 		socket.on('moveMade', function(data){
 			console.log("move was made");
-			console.log("row is: " + data.row);
+			// console.log("row is: " + data.row);
 			console.log("col is: " + data.col);
 			var playerNumber;
 			for(var i = 0; i < socketList.length; i++){
@@ -105,12 +105,18 @@ exports.init = function(io) {
 			}
 			console.log("playerNumber is: " + playerNumber);
 			// check if its a valid move here
-			mongoModel.changeBoard(data.row, data.col, playerNumber);
+			console.log("calling changeBoard with player " + playerNumber);
+			mongoModel.changeBoard(data.col, playerNumber);
 			var board = mongoModel.returnBoard();
+			// var didWin = mongoModel.checkForWin(playerNumber);
+			// console.log("playerNumber "+ playerNumber + " did win the game "+didWin);
+			// socket.emit('wonGame');
+			// socket.broadcast.emit('lostGame');
 			// var playerTurn = mongoModel.returnCurrentPlayer();
 			// console.log("player number is: " + playerTurn);
 				// mongoModel.togglePlayer();
-			socket.emit('waitForTurn');
+			// wait for Turn but still see the move that you made
+			socket.emit('waitForTurn', {'board':board, 'playerNumberOne': playerNumberOne, 'playerNumberTwo':playerNumberTwo});
 			console.log("board in moveMade is:" + board);
 			playerNumberOne = socketList[0].playerNumber;
 			playerNumberTwo = socketList[1].playerNumber;
