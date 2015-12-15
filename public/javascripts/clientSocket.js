@@ -80,12 +80,18 @@ socket.on('waitForTurn', function(data){
 	$("#rowcol").hide();
 });
 
-socket.on('wonGame', function(){
+socket.on('wonGame', function(data){
+	$('#yourTurn').text('');
 	$('#wonGame').text("You won the Game");
+	$('#gameBoard').html('');
+	displayBoard(data.board, data.playerNumberOne, data.playerNumberTwo);
 });
 
-socket.on('lostGame', function(){
+socket.on('lostGame', function(data){
+	$('#yourTurn').text('');
 	$('#wonGame').text("You lost the Game");
+	$('#gameBoard').html('');
+	displayBoard(data.board, data.playerNumberOne, data.playerNumberTwo);
 });
 
 

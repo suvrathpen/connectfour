@@ -12,12 +12,13 @@ exports.init = function(app) {
   // app.put('/connect', doCreate); // CRUD Create
   app.get('/connect', doRetrieve); // CRUD Retrieve
   app.post('/connect/:row/:column', doUpdate); // CRUD Update
+  app.get('/leaderboard', doRetrieve);
   // The CRUD Delete path is left for you to define
 }
 index = function(req, res) {
   // console.log("index is");
   // console.log(mongoModel.board);
-  res.render('index', {'success': 'false'});
+  res.render('index');
 };
 //collection is called connectFour
 doCreate = function(req, res) {
@@ -62,14 +63,14 @@ doRetrieve = function(req, res){
    * modelData is an array of objects returned as a result of the Retrieve
    */
   mongoModel.retrieve(
-    'connect', 
-    req.query,
+    'connectfour', 
+    {},
 		function(modelData) {
 		  if (modelData.length) {
-        res.render('results',{title: 'Mongo Demo', obj: modelData});
+        res.render('leaderboard',{title: 'Mongo Demo', obj: modelData});
       } else {
-        var message = "No documents with "+JSON.stringify(req.query)+ 
-                      " in collection "+req.params.collection+" found.";
+        var message = "No documents with "+JSON.stringify({})+ 
+                      " in collection "+"connectfour"+" found.";
         res.render('message', {title: 'Mongo Demo', obj: message});
       }
 		});

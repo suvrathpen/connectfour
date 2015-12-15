@@ -70,6 +70,24 @@ mongoClient.connect('mongodb://'+connection_string, function(err, db) {
   // console.log(board);
  }
 
+
+ exports.create = function(collection, data, callback) {
+  console.log("4. Start insert function in mongoModel");
+  // Do an asynchronous insert into the given collection
+  mongoDB.collection(collection).insertOne(
+    data,                     // the object to be inserted
+    function(err, status) {   // callback upon completion
+      if (err) doError(err);
+      console.log("5. Done with mongo insert operation in mongoModel");
+      // use the callback function supplied by the controller to pass
+      // back true if successful else false
+      var success = (status.result.n == 1 ? true : false);
+      callback(success);
+      console.log("6. Done with insert operation callback in mongoModel");
+    });
+  console.log("7. Done with insert function in mongoModel");
+}
+
 exports.createBoard = function(collection, data, callback) {
   console.log("4. Start insert function in mongoModel");
   // Do an asynchronous insert into the given collection
@@ -98,13 +116,22 @@ exports.createBoard = function(collection, data, callback) {
  * and toArray:
  * http://mongodb.github.io/node-mongodb-native/2.0/api/Cursor.html#toArray
  */
+
+exports.count = function(collection, query, callback){
+  mongoDB.collection(collection).count(query).toArray(function(err, docs) {
+    if (err) doError(err);
+    // docs are MongoDB documents, returned as an array of JavaScript objects
+    // Use the callback provided by the controller to send back the docs.
+    callback(docs);
+  });
+}
 exports.retrieve = function(collection, query, callback) {
   /*
    * The find sets up the cursor which you can iterate over and each
    * iteration does the actual retrieve. toArray asynchronously retrieves the
    * whole result set and returns an array.
    */
-  mongoDB.collection(collection).find(query).toArray(function(err, docs) {
+  mongoDB.collection(collection).find(query).sort({'wins' : -1}).toArray(function(err, docs) {
     if (err) doError(err);
     // docs are MongoDB documents, returned as an array of JavaScript objects
     // Use the callback provided by the controller to send back the docs.
@@ -124,7 +151,7 @@ exports.retrieve = function(collection, query, callback) {
 exports.update = function(collection, filter, update, callback) {
   mongoDB
     .collection(collection)     // The collection to update
-    .updateMany(                // Use updateOne to only update 1 document
+    .updateOne(                // Use updateOne to only update 1 document
       filter,                   // Filter selects which documents to update
       update,                   // The update operation
       {upsert:true},            // If document not found, insert one with this update
@@ -136,61 +163,82 @@ exports.update = function(collection, filter, update, callback) {
         });
 }
 
+// got initial pseudocode from http://stackoverflow.com/questions/21146940/connect-4-java-win-conditions-check
+//http://stackoverflow.com/questions/25289526/connect-4-check-if-player-wins
+function checkHorizontal(playerNumber){
+  console.log("board in checkHorizontal is: "+ board);
+  console.log("playerNumber in checkHorizontal is: "+ playerNumber);
+   for(var i = 0; i < 6;i++){
+    for(var j = 0; j < 4;j++){
+      if(board[i][j] == playerNumber && board[i][j+1] == playerNumber && board[i][j+2] == playerNumber && board[i][j+3] == playerNumber){
+        console.log("player won horizontally");
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+// got initial pseudocode from http://stackoverflow.com/questions/21146940/connect-4-java-win-conditions-check
+//http://stackoverflow.com/questions/25289526/connect-4-check-if-player-wins
+function checkVertical(playerNumber){
+  console.log("board in checkVertical is: " + board);
+  console.log("playerNumber in checkVertical is: "+ playerNumber);
+  //checks vertical win
+  for(var i = 0; i < 3; i++){
+    for(var j = 0; j < 7; j++){
+      if(board[i][j] == playerNumber && board[i+1][j] == playerNumber && board[i+2][j] == playerNumber && board[i+3][j] == playerNumber){
+        console.log("player won vertically");
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function checkDiagonal(playerNumber){
+  //checks right diagonal win
+  var didWin = false;
+  for(var i = 0; i < 3;i++){
+    for(var j = 0; j < 4; j++){
+      if(board[i][j] == playerNumber && board[i+1][j+1] == playerNumber && board[i+2][j+2] == playerNumber && board[i+3][j+3] == playerNumber){
+        console.log("player won diagonally");
+        didWin = true;
+      }
+    }
+  }
+  //checks left diagonal win
+  for(var i = 0; i < 3; i++){
+    for(var j = 0; j < 4;j++){
+      if(board[i][j] == playerNumber && board[i+1][j-1] == playerNumber && board[i+2][j-2] == playerNumber && board[i+3][j-3] == playerNumber){
+        console.log("player won diagonally");
+        didWin = true;
+      }
+    }
+  }
+  return didWin;
+}
+
+
 exports.checkForWin = function(playerNumber){
   var result = checkHorizontal(playerNumber);
+  console.log("result from checkHorizontal is: "+result);
   if(result){
     return true;
   }
   result = checkVertical(playerNumber);
+  console.log("result from checkVertical is: "+result);
+  if(result){
+    return true;
+  }
+  result = checkDiagonal(playerNumber);
+  console.log("result from checkDiagonal is: "+result);
   if(result){
     return true;
   }
   // checkDiagonals as well;
   return false;
 
-}
-
-// got initial pseudocode from http://stackoverflow.com/questions/21146940/connect-4-java-win-conditions-check
-exports.checkHorizontal = function(playerNumber){
-  var count = 0;
-  var didWin = false;
-  for(var i = 0; i < 6; i++){
-    count = 0;
-    for(var j = 0; j < 7; j++){
-      if(board[i][j] = playerNumber)
-        count++;
-      else // reset the counting, the eventual sequence has been interrupted
-        count = 0;
-    }
-    if(count >= 4){
-      didWin = true;
-      break;
-    }
-  }
-  console.log("player won horizontally");
-  return didWin;
-}
-// got initial pseudocode from http://stackoverflow.com/questions/21146940/connect-4-java-win-conditions-check
-exports.checkVertical = function(playerNumber){
-  var count = 0;
-  var didWin = false;
-  for(var j = 0; j < 7; j++){
-    count = 0;
-    for(var i = 0; i < 6; i++){
-        if(board[i][j] = playerNumber){
-          count++;
-        }
-        else{
-          count = 0;
-        }
-    }
-    if(count >= 4){
-      didWin = true
-      break;
-    }
-  }
-  console.log("player won");
-  return didWin;
 }
 
 // exports.checkDiagonal = function(playerNumber){
