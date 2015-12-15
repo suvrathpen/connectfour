@@ -5,7 +5,7 @@ var myName = null
 $(function() {
 });
 
-var socket = io.connect();
+var socket = io.connect("http://connectfour-smoney.rhcloud.com:8000");
 
 function displayBoard(board, playerNumberOne, playerNumberTwo){
 	var counter = 0;
