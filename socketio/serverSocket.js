@@ -39,30 +39,6 @@ exports.init = function(io) {
 				console.log(board);
 				console.log('usernameList is: '+ usernameList);
 				console.log("socketList is: " + socketList);
-				//insert user one
-				// console.log("1. Starting doCreate in dbRoutes");
-
-			 //  mongoModel.createBoard ( 'connectfour', 
-			 //                          {'username': usernameList[0], 'wins': 0},
-			 //                      function(result) {
-			 //                        // result equal to true means create was successful
-			 //                        var success = (result ? "Create successful" : "Create unsuccessful");
-			 //                        // res.render('message', {title: 'Mongo Demo', obj: success});
-			 //                        console.log("2. Done with callback in serverSocket create");
-			 //                      });
-			 //  console.log("3. Done with serverSocket in dbRoutes");
-			 //  //insert user two
-			 //  console.log("1. Starting doCreate in dbRoutes");
-			 //  mongoModel.createBoard ( 'connectfour', 
-			 //                          {'username': usernameList[1], 'wins': 0},
-			 //                      function(result) {
-			 //                        // result equal to true means create was successful
-			 //                        var success = (result ? "Create successful" : "Create unsuccessful");
-			 //                        // res.render('message', {title: 'Mongo Demo', obj: success});
-			 //                        console.log("2. Done with callback in serverSocket create");
-			 //                      });
-			 //  console.log("3. Done with serverSocket in dbRoutes");
-
 				socket.emit('waitForTurn');
 				playerNumberOne = socketList[0].playerNumber;
 				playerNumberTwo = socketList[1].playerNumber;

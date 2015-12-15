@@ -4,14 +4,14 @@ var mongoModel = require("../models/mongoModel.js")
 // Define the routes for this controller
 exports.init = function(app) {
   //initialize the board
-  app.put('/home', doCreate);
+  // app.put('/home', doCreate);
   app.get('/', index); // essentially the app welcome page
   // The collection parameter maps directly to the mongoDB collection
-  app.get('/board', getBoard);
+  // app.get('/board', getBoard);
   // app.put('/createBoard', putBoard);
   // app.put('/connect', doCreate); // CRUD Create
-  app.get('/connect', doRetrieve); // CRUD Retrieve
-  app.post('/connect/:row/:column', doUpdate); // CRUD Update
+  // app.get('/connect', doRetrieve); // CRUD Retrieve
+  // app.post('/connect/:row/:column', doUpdate); // CRUD Update
   app.get('/leaderboard', doRetrieve);
   // The CRUD Delete path is left for you to define
 }

@@ -163,8 +163,7 @@ exports.update = function(collection, filter, update, callback) {
         });
 }
 
-// got initial pseudocode from http://stackoverflow.com/questions/21146940/connect-4-java-win-conditions-check
-//http://stackoverflow.com/questions/25289526/connect-4-check-if-player-wins
+// Code Citation: http://stackoverflow.com/questions/25289526/connect-4-check-if-player-wins
 function checkHorizontal(playerNumber){
   console.log("board in checkHorizontal is: "+ board);
   console.log("playerNumber in checkHorizontal is: "+ playerNumber);
@@ -179,8 +178,7 @@ function checkHorizontal(playerNumber){
   return false;
 }
 
-// got initial pseudocode from http://stackoverflow.com/questions/21146940/connect-4-java-win-conditions-check
-//http://stackoverflow.com/questions/25289526/connect-4-check-if-player-wins
+// Code Citation: http://stackoverflow.com/questions/25289526/connect-4-check-if-player-wins
 function checkVertical(playerNumber){
   console.log("board in checkVertical is: " + board);
   console.log("playerNumber in checkVertical is: "+ playerNumber);
@@ -196,6 +194,7 @@ function checkVertical(playerNumber){
   return false;
 }
 
+// Code Citation: http://stackoverflow.com/questions/25289526/connect-4-check-if-player-wins
 function checkDiagonal(playerNumber){
   //checks right diagonal win
   var didWin = false;
